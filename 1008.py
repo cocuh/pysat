@@ -1,9 +1,19 @@
+"""
+Python Sat Solver
+
+To use simply, $ python -OO {this} {cnf file}
+OO option is optimize option.
+"""
 import logging
 
 if __debug__:
     logging.basicConfig(level=logging.DEBUG)
 
+
 class Solver(object):
+    """
+    Solver object
+    """
     def __init__(self):
         self.litlist = LitList()
         self.clause_list = []
@@ -12,23 +22,37 @@ class Solver(object):
         self.level = 0
         self.root_level = 0
 
+        # key -> level, value -> literal list
         self.propagate_history = {}
         self.decide_history = {}
 
+        # True  -> satisfied
+        # False -> unsatisfied
+        # None  -> running
         self.status = None
 
         self.conflict_count = 0
         self.decide_count = 0
 
+        # sign when literal decided.
         self.ASSIGN_DEFAULT = True
 
     def solve(self):
+        """start solving
+
+        try solving while unsat or sat
+        """
         logging.debug("solve")
         logging.info(str(self))
-        while self.is_undef():
+        while self.is_running():
             self._solve()
 
     def _solve(self):
+        """main solving function
+
+        Returns:
+            None
+        """
         while True:
             conflict_clause = self.propagate()
             if isinstance(conflict_clause, Clause):
@@ -47,7 +71,6 @@ class Solver(object):
                 # restart here
                 if self.decide_count % 1000 == 0:
                     save_result(self)
-                    print(self)
 
                 # NO CONFLICT
                 next_lit = self.popup_literal()
@@ -61,6 +84,11 @@ class Solver(object):
         pass
 
     def propagate(self):
+        """
+
+        Returns:
+            (backjump_level, learnt_clause)
+        """
         while True:
             propagatable_list = []
             # reloading watching ltieral
@@ -84,10 +112,19 @@ class Solver(object):
                     self.propagate_history[self.level].append(blit)
 
     def analyze(self, conflict_clause):
+        """analyze conflicting clause
+
+        returns learnt clause
+
+        :param conflict_clause: conflicting clause
+        :type conflict_clause: Clause
+        :returns: (int, Clause) -- (backjump_level, learnt_clause)
+        """
         LIT_HISTORY = [self.decide_history[self.level]]+[x.lit for x in self.propagate_history[self.level]]
         def _pop_next_pointer(blit_set):
-            """
-            return Lit, blit_list
+            """return latest literal
+
+            :returns: (Lit, list) -- (next_literal, bind_literal_list)
             """
             data = [x.lit for x in blit_set]
             for lit in reversed(LIT_HISTORY):
@@ -142,6 +179,11 @@ class Solver(object):
         return backjump_level, learnt_clause
 
     def _gen_learnt_clause(self, lit_list):
+        """generate learnt clause from literal list.
+
+        :param lit_list: literal list
+        :type lit_list: list
+        """
         blit_list = []
         for lit in lit_list:
             sign = lit.get_sign()
@@ -150,6 +192,12 @@ class Solver(object):
         return Clause(blit_list, learnt=True)
 
     def cancel_until(self, backjump_level):
+        """rollback to backjump_level
+
+        :param backjump_level: backjump level
+        :type backjump_level: int
+        :returns: None
+        """
         keys = list(self.decide_history.keys())
         for key in keys:
             if key > backjump_level:
@@ -162,6 +210,12 @@ class Solver(object):
                 lit.set_default()
 
     def decide(self, lit):
+        """decide literal as ASSIGN_DEFAULT
+
+        :param lit: decide literal
+        :type lit: Lit
+        :returns: None
+        """
         assert isinstance(lit, Lit)
         self.level += 1
         lit.assign(self.ASSIGN_DEFAULT, self.level)
@@ -171,6 +225,16 @@ class Solver(object):
         logging.debug(str(self))
 
     def add_clause(self, clause):
+        """add clause to solver
+
+        if one literal clause is given,
+            assign literal without adding solver's clause list.
+        if learnt clause is given, add learnt clause list.
+
+        :param clause: clause
+        :type clause: Clause
+        :returns: None
+        """
         assert isinstance(clause, Clause)
         if len(clause) == 1:
             blit = clause.get_bindlit_list()[0]
@@ -184,6 +248,12 @@ class Solver(object):
             self.clause_list.append(clause)
 
     def popup_literal(self, is_random=True):
+        """select next decide literal from unassigned literal.
+
+        :param is_random: optional default is True
+        :type is_random: bool
+        :returns: None
+        """
         if is_random:
             import random
             l = [x for x in self.litlist if x.is_unassigned()]
@@ -199,6 +269,8 @@ class Solver(object):
             return None
 
     def print_result(self):
+        """print status
+        """
         if self.status is True:
             print("")
             print("#############")
@@ -212,7 +284,7 @@ class Solver(object):
             print("-------------")
             print("")
 
-    def is_undef(self):
+    def is_running(self):
         return self.status is None
 
     def is_sat(self):
@@ -466,9 +538,11 @@ def save_result(solver):
     with open("/tmp/resutlt",'w') as fp:
         fp.write(string)
 
+def usage():
+    print("Usage: {cmd} cnffile".format(cmd=__file__))
+
 if __name__ == '__main__':
     import sys
-    import os
     if len(sys.argv) == 2:
         string = open(sys.argv[1]).read()
         solver = parse(string)
@@ -479,4 +553,6 @@ if __name__ == '__main__':
         save_result(solver)
         if solver.status == False:
             sys.exit(1)
+    else:
+        usage()
     pass
