@@ -1,13 +1,18 @@
-#!/usr/bin/python
+#!/usr/bin/python -OO
 """
 Python Sat Solver
 
-To use simply, $ python -OO {this} {cnf file}
-OO option is optimize option.
+To use simply, $ {this} {cnf file}
+or $ python -OO {cnf file}
+
+If possible, you should use pypy.
 """
 import logging
+import random
+import argparse
+import re
 
-LOGFILE_PATH = "/tmp/result"
+RESULT_FILE = None
 
 if __debug__:
     logging.basicConfig(level=logging.DEBUG)
@@ -39,6 +44,7 @@ class Solver(object):
 
         # sign when literal decided.
         self.ASSIGN_DEFAULT = True
+        self.pickup_type = "random"
 
     def solve(self):
         """start solving
@@ -145,10 +151,9 @@ class Solver(object):
             assert False, "not reachable"
 
         logging.debug(self)
-
-        logging.info("analyze %s"%str(conflict_clause))
-        logging.info("level %d %s"%(self.level, self.decide_history[self.level]))
-        logging.info("propagate_history lv.%d: %s"%(self.level,', '.join([str(x)for x in self.propagate_history[self.level]])))
+        logging.debug("analyze %s"%str(conflict_clause))
+        logging.debug("level %d %s"%(self.level, self.decide_history[self.level]))
+        logging.debug("propagate_history lv.%d: %s"%(self.level,', '.join([str(x)for x in self.propagate_history[self.level]])))
 
         lower_level_blit = set()
         current_level_blit = set()
@@ -232,7 +237,7 @@ class Solver(object):
         decide_literal.assign(self.ASSIGN_DEFAULT, self.level)
         self.decide_history[self.level] = decide_literal
         self.propagate_history[self.level] = []
-        logging.info('decide: %s'%decide_literal)
+        logging.debug('decide: %s'%decide_literal)
         logging.debug(str(self))
 
     def add_clause(self, clause):
@@ -257,14 +262,12 @@ class Solver(object):
         else:
             self.clause_list.append(clause)
 
-    def popup_literal(self, is_random=True):
+    def popup_literal(self):
         """select next decide literal from unassigned literal.
-
-        Args:
-            is_random (bool): (optional) if true, pick up literal ramdom
         """
-        if is_random:
-            import random
+
+        if self.pickup_type == 'random':
+            # random
             l = [x for x in self.litlist if x.is_unassigned()]
             if len(l) == 0:
                 return None
@@ -272,6 +275,7 @@ class Solver(object):
                 i = random.randint(0,len(l)-1)
                 return l[i]
         else:
+            # order
             for lit in self.litlist:
                 if lit.is_unassigned():
                     return lit
@@ -601,8 +605,6 @@ def parse(string):
     Returns:
         Solver
     """
-    import re
-
     solver = Solver()
     def parse_clause(inp):
         """parse cnf line to clause
@@ -640,31 +642,49 @@ def parse(string):
     return solver
 
 def save_result(solver):
-    """save solver status as LOGFILE_PATH
+    """save solver status as RESULT_FILE
 
     Arguments:
         solver(Solver)
     """
     string = str(solver)
-    if LOGFILE_PATH:
-        with open(LOGFILE_PATH,'w') as fp:
-            fp.write(string)
+    if RESULT_FILE:
+        RESULT_FILE.write(string)
 
-def usage():
-    print("Usage: {cmd} cnffile".format(cmd=__file__))
+def argument_parse():
+    parser = argparse.ArgumentParser(description="Sat Solver on Python")
+    parser.add_argument('file',
+                        type=open,
+                        help='cnf file name',
+                        )
+    parser.add_argument('--choose-type',
+                        choices=['random','order'],
+                        help='how decide literal choose',
+                        default='random',
+                        )
+    parser.add_argument('--assign-default',
+                        type=bool,
+                        help='default decide',
+                        default=True
+                        )
+    parser.add_argument('--result-path',
+                        type=open,
+                        help='ouptput result path',
+                        default=None,
+                        )
+    return parser.parse_args()
 
 if __name__ == '__main__':
-    import sys
-    if len(sys.argv) == 2:
-        string = open(sys.argv[1]).read()
-        solver = parse(string)
-        print(solver)
-        solver.solve()
-        print(solver)
-        solver.print_result()
-        save_result(solver)
-        if solver.status == False:
-            sys.exit(1)
-    else:
-        usage()
-    pass
+    arguments = argument_parse()
+    string = arguments.file.read()
+    solver = parse(string)
+
+    solver.ASSIGN_DEFAULT = arguments.assign_default
+    solver.choose_type = arguments.choose_type
+    RESULT_FILE = arguments.result_path
+
+    solver.solve()
+    print(solver)
+
+    solver.print_result()
+    save_result(solver)
