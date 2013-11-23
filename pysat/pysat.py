@@ -1,3 +1,4 @@
+#!/usr/bin/python
 """
 Python Sat Solver
 
