@@ -7,6 +7,8 @@ OO option is optimize option.
 """
 import logging
 
+LOGFILE_PATH = "/tmp/result"
+
 if __debug__:
     logging.basicConfig(level=logging.DEBUG)
 
@@ -42,6 +44,7 @@ class Solver(object):
         """start solving
 
         try solving while unsat or sat
+        return sat or unsat as solver.status
         """
         logging.debug("solve")
         logging.info(str(self))
@@ -49,11 +52,7 @@ class Solver(object):
             self._solve()
 
     def _solve(self):
-        """main solving function
-
-        Returns:
-            None
-        """
+        """main solving function"""
         while True:
             conflict_clause = self.propagate()
             if isinstance(conflict_clause, Clause):
@@ -85,10 +84,13 @@ class Solver(object):
         pass
 
     def propagate(self):
-        """
+        """propagate clause, reloading watching literal
 
         Returns:
-            (backjump_level, learnt_clause)
+            Clause or None
+
+            Clause : Conflicting Clause
+            None   : No conflicting, propagated successfully
         """
         while True:
             propagatable_list = []
@@ -115,18 +117,26 @@ class Solver(object):
     def analyze(self, conflict_clause):
         """analyze conflicting clause
 
-        returns learnt clause
+        Arguments:
+            conflict_clause(Clause): conflicting clause
+        Returns:
+            (backjump_level, learnt_clause)
 
-        :param conflict_clause: conflicting clause
-        :type conflict_clause: Clause
-        :returns: (int, Clause) -- (backjump_level, learnt_clause)
+            backjump_level(int)  : backjump level
+            learnt_clause(clause) : learnt clause by analyzing conflicting clause
         """
+
+        # implication graph in the level
         LIT_HISTORY = [self.decide_history[self.level]]+[x.lit for x in self.propagate_history[self.level]]
         def _pop_next_pointer(blit_set):
-            """return latest literal
-
-            :returns: (Lit, list) -- (next_literal, bind_literal_list)
-            """
+            # pop latest literal on implication graph from blit_set
+            #
+            # Arguments:
+            #   blit_set(set) : BindLit set
+            # Returns:
+            #   (next_literal, bind_literal_list)
+            #   next_literal(Lit) : latest literal on implication graph
+            #   bind_literal_list(list) : other bind literals
             data = [x.lit for x in blit_set]
             for lit in reversed(LIT_HISTORY):
                 if lit in data:
@@ -182,22 +192,23 @@ class Solver(object):
     def _gen_learnt_clause(self, lit_list):
         """generate learnt clause from literal list.
 
-        :param lit_list: literal list
-        :type lit_list: list
+        Arguments:
+            lit_list(list) : literal list, it will convert to learnt clause
+        Returns:
+            learnt_clause(Clause)
         """
         blit_list = []
         for lit in lit_list:
             sign = lit.get_sign()
             assert isinstance(sign, bool), 'unassigned is arienai %s'%sign
             blit_list.append(lit.get_bind_lit(not sign))
-        return Clause(blit_list, learnt=True)
+        return Clause(blit_list, is_learnt=True)
 
     def cancel_until(self, backjump_level):
         """rollback to backjump_level
 
-        :param backjump_level: backjump level
-        :type backjump_level: int
-        :returns: None
+        Arguments:
+            backjump_level(int) : rollback to the backjump level
         """
         keys = list(self.decide_history.keys())
         for key in keys:
@@ -210,19 +221,18 @@ class Solver(object):
             if not lit.is_unassigned() and (lit.get_level() > backjump_level):
                 lit.set_default()
 
-    def decide(self, lit):
+    def decide(self, decide_literal):
         """decide literal as ASSIGN_DEFAULT
 
-        :param lit: decide literal
-        :type lit: Lit
-        :returns: None
+        Arguments:
+            decide_literal(Lit)
         """
-        assert isinstance(lit, Lit)
+        assert isinstance(decide_literal, Lit)
         self.level += 1
-        lit.assign(self.ASSIGN_DEFAULT, self.level)
-        self.decide_history[self.level] = lit
+        decide_literal.assign(self.ASSIGN_DEFAULT, self.level)
+        self.decide_history[self.level] = decide_literal
         self.propagate_history[self.level] = []
-        logging.info('decide: %s'%lit)
+        logging.info('decide: %s'%decide_literal)
         logging.debug(str(self))
 
     def add_clause(self, clause):
@@ -232,9 +242,8 @@ class Solver(object):
             assign literal without adding solver's clause list.
         if learnt clause is given, add learnt clause list.
 
-        :param clause: clause
-        :type clause: Clause
-        :returns: None
+        Arguments:
+            clause(Clause)
         """
         assert isinstance(clause, Clause)
         if len(clause) == 1:
@@ -251,9 +260,8 @@ class Solver(object):
     def popup_literal(self, is_random=True):
         """select next decide literal from unassigned literal.
 
-        :param is_random: optional default is True
-        :type is_random: bool
-        :returns: None
+        Args:
+            is_random (bool): (optional) if true, pick up literal ramdom
         """
         if is_random:
             import random
@@ -270,8 +278,7 @@ class Solver(object):
             return None
 
     def print_result(self):
-        """print status
-        """
+        """print satisfied or unsatisfied"""
         if self.status is True:
             print("")
             print("#############")
@@ -316,12 +323,38 @@ class Solver(object):
 
 
 class Lit(object):
+    """Literal Object
+
+    Attributes:
+        id(id): unique id
+        bindlits(dict): the literal's bind literal, key is True or False
+        sign(None or bool): literal's sign
+            None -- unassigned
+            True -- assigned True
+            False -- assigned False
+        level(int): level when assigned
+        reason(None or Clause): if the literal is propagated, the reason clause
+    """
     def __init__(self, id):
+        """initialize literal
+
+        Arguments:
+            id: literal unique id
+        """
         self.id = id
         self.bindlits = self._gen_bindlit()
         self.set_default()
 
     def assign(self, sign, level, reason=None):
+        """assign literal
+
+        if propagated, set reason
+
+        Arguments:
+            sign(bool): literal sign
+            level(int): decide or propagated level
+            reason(Clause):(optical)if propagated, the reason clause
+        """
         assert isinstance(sign, bool)
         assert isinstance(level, int)
         assert reason is None or isinstance(reason, Clause)
@@ -330,6 +363,8 @@ class Lit(object):
         self.reason = reason
 
     def set_default(self):
+        """reset to default attribute
+        """
         self.sign = None
         self.level = None
         self.reason = None
@@ -370,10 +405,22 @@ class Lit(object):
 
 
 class LitList(object):
+    """literal list
+
+    this object is one-index list.
+    so you can use literal.id and cnf number as index, when you generate this as expected.
+    """
     def __init__(self):
         self.data = []
         pass
     def get(self, id):
+        """get literal from list
+
+        Arguments:
+            id(int): literal id, don't mind positive or negative
+        Returns:
+            Lit
+        """
         assert isinstance(id, int)
         idx = abs(id)
         assert idx >= 1
@@ -382,6 +429,13 @@ class LitList(object):
         return self.data[idx-1]
 
     def get_bind_lit(self, id):
+        """get binded literal from list
+
+        Arguments:
+            id(int): literal id. if negative, returns False bind_lit.
+        Returns:
+            BindLit
+        """
         lit = self.get(id)
         if id < 0:
             return lit.get_bind_lit(False)
@@ -398,25 +452,37 @@ class LitList(object):
 
 
 class Clause(object):
-    """
+    """Clause Object
+
+    Attributes:
+        id(int): unique id
+        bindlit_list(list): component bind literals
+        _is_learnt(bool)
+        watching_literal(tuble or None):
+            None -- not initialized
+            tuple(int, int) -- bindlit_list's index
     """
     _num = 0
     # self.id : int
     # self.learnt : bool
 
-    def __init__(self, bindlit_list, learnt=False):
-        assert isinstance(learnt, bool)
+    def __init__(self, bindlit_list, is_learnt=False):
+        assert isinstance(is_learnt, bool)
         self.id = self._gen_id()
         self.bindlit_list = sorted(bindlit_list,key=lambda y:y.lit.get_id())
-        self.learnt = learnt
+        self._is_learnt = is_learnt
         self.watching_literal = None
         pass
 
     def reload_watching_literal(self):
-        """
-        reload successful, return True
-        propagatable, return bindlit
-        conflict return False
+        """reload watching literal
+
+        Returns:
+            bool or BindLit
+
+            BindLit -- propagatable literal
+            True    -- the clause is satisfied or unassigned
+            False   -- conflict
         """
         res = self._check_watching_literal()
         for i, idx in enumerate(res):
@@ -446,6 +512,10 @@ class Clause(object):
         assert False, "not reachable"
 
     def set_watching_literal(self, wl):
+        """
+        Arguments:
+            wl(tuple): (int, int) -- watching literal indexes
+        """
         assert isinstance(wl, tuple)
         assert None not in wl, str(wl)
         assert len(wl) == 2, str(wl)
@@ -456,9 +526,16 @@ class Clause(object):
         return self.bindlit_list
 
     def is_learnt(self):
-        return self.learnt is True
+        return self._is_learnt is True
 
     def _check_watching_literal(self):
+        """check watching literal
+
+        Returns:
+            [int or None, int or None]
+            int -- the literal index
+            None -- the literal is assigned False, so the literal need reload
+        """
         return [None if self.bindlit_list[x].get_sign()is False else x for x in self.watching_literal]
 
     @classmethod
@@ -474,16 +551,27 @@ class Clause(object):
             id=self.id,
             watching=self.watching_literal,
             lits=", ".join([str(x)for x in self.bindlit_list]),
-            learnt="l"if self.learnt else "-"
+            learnt="l"if self._is_learnt else "-"
         )
 
 
 class BindLit(object):
+    """bind literal and sign for clause
+
+    Attributes:
+        lit(Lit)
+        _sign(bool)
+    """
     def __init__(self, lit, sign):
         self.lit = lit
         self._sign = sign
 
     def get_sign(self):
+        """return bindlit's sign and the literal's sign
+
+        Returns:
+            bool
+        """
         s = self.lit.get_sign()
         if s is None:
             return None
@@ -493,6 +581,11 @@ class BindLit(object):
             return not s
 
     def get_raw_sign(self):
+        """return the bindlit's sign
+
+        Returns:
+            bool
+        """
         return self._sign
 
     def __str__(self):
@@ -503,10 +596,22 @@ class BindLit(object):
 
 
 def parse(string):
+    """parse string as CNF file
+
+    Returns:
+        Solver
+    """
     import re
 
     solver = Solver()
     def parse_clause(inp):
+        """parse cnf line to clause
+
+        Arguments:
+            inp(str)
+        Returns:
+            Clause
+        """
         s = set()
         for x in inp.split(' '):
             if x == '':
@@ -535,9 +640,15 @@ def parse(string):
     return solver
 
 def save_result(solver):
+    """save solver status as LOGFILE_PATH
+
+    Arguments:
+        solver(Solver)
+    """
     string = str(solver)
-    with open("/tmp/resutlt",'w') as fp:
-        fp.write(string)
+    if LOGFILE_PATH:
+        with open(LOGFILE_PATH,'w') as fp:
+            fp.write(string)
 
 def usage():
     print("Usage: {cmd} cnffile".format(cmd=__file__))
