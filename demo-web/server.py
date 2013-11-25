@@ -22,19 +22,27 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         self.id = self.get_argument("id")
         self.stream.set_nodelay(True)
         clients[self.id] = {"id": self.id, "object":self}
+        
+        self.p = None
     
     def on_message(self, message):
         print("Client %s received a message: %s" % (self.id, message))
         if message == 'start':
             from subprocess import Popen, PIPE, STDOUT
-            p = Popen(['python', '../pysat/pysat.py','../sample_cnf/hoge.cnf'], stdout=PIPE,stderr=STDOUT)
-            for line in iter(p.stdout.readline, b''):
+            if self.p:
+                self.p.kill()
+            self.p = Popen(['python', '-OO', '../pysat/pysat-extended.py' ,'--sleep','100','--output-type','json', '../sample_cnf/input.cnf'], stdout=PIPE,stderr=STDOUT)
+            for line in iter(self.p.stdout.readline, b''):
                 print(line)
                 self.write_message(line)
     
     def on_close(self):
         if self.id in clients:
             del clients[self.id]
+        print('closed')
+        if self.p:
+            self.p.kill()
+            self.p = None
 
 app = tornado.web.Application([
     (r'/', WebSocketHandler),
