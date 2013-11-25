@@ -11,31 +11,35 @@ define('port', default=8888, help='run on the given port', type=int)
 
 here = os.path.abspath(os.path.dirname(__file__))
 
-clients = dict()
+clients = []
+
 
 
 class IndexHandler(tornado.web.RequestHandler):
-    @tornado.web.asynchronous
     def get(self, *args, **kwargs):
-        self.set_header('Content-Type','application/json')
-        self.set_header('Access-Control-Allow-Origin','*')
-        
+        res = open(here+'/client.html').read()
         cnf_files = os.listdir(here+'/../sample_cnf')
-        res = json.dumps(cnf_files)
+        options = []
+        for filename in cnf_files:
+            l = open(here+'/../sample_cnf/'+filename).read().split('p cnf ')[1].strip().split(' ')
+            num_l = l[0]
+            num_c = l[1]
+            print(options)
+            options.append('<option value="{s}">{s} {l} {c}</option>'.format(s=filename,l=num_l,c=num_c))
+        res= res.replace('{{ options }}',''.join(options))
         self.write(res)
         self.finish()
-        
+
 
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
     def open(self):
-        self.id = self.get_argument("id")
         self.stream.set_nodelay(True)
-        clients[self.id] = {"id": self.id, "object":self}
-        
+        clients.append(self)
+
         self.p = None
     
     def on_message(self, message):
-        print("Client %s received a message: %s" % (self.id, message))
+        print("Client  received a message: %s" % ( message))
         l = message.split(' ')
         cnf_files = os.listdir(here+'/../sample_cnf')
         filename = 'input.cnf'
@@ -46,23 +50,33 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
             from subprocess import Popen, PIPE, STDOUT
             if self.p:
                 self.p.kill()
-            self.p = Popen(['python', '-OO', '../pysat/pysat-extended.py' ,'--sleep','100','--output-type','json', '../sample_cnf/'+filename], stdout=PIPE,stderr=STDOUT)
+            self.p = Popen(['python', '-OO', '../pysat/pysat-extended.py',
+                            '--choose-type','order' ,'--sleep','100',
+                            '--output-type','json', '../sample_cnf/'+filename],
+                           stdout=PIPE,stderr=STDOUT)
             for line in iter(self.p.stdout.readline, b''):
                 print(line)
-                self.write_message(line)
-    
+                for client in clients:
+                    client.write_message(line)
+
     def on_close(self):
-        if self.id in clients:
-            del clients[self.id]
+        clients.remove(self)
         print('closed')
         if self.p:
             self.p.kill()
             self.p = None
 
+
+class StaticFileHandler(tornado.web.StaticFileHandler):
+    def set_extra_headers(self, path):
+        self.set_header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+
+
 app = tornado.web.Application([
-    (r'/', WebSocketHandler),
-    (r'/filename', IndexHandler),
-])
+    (r'/', IndexHandler),
+    (r'/start', WebSocketHandler),
+    (r'/static/(.*)',StaticFileHandler, {"path":here+'/static/'})
+],)
 
 
 if __name__ == '__main__':

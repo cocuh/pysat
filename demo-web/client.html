@@ -1,46 +1,22 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-	<script type="text/javascript">
-        function start(){
-            var messageContainer = document.getElementById("messages");
-            if ("WebSocket" in window) {
-                messageContainer.innerHTML = "WebSocket is supported by your Browser!";
-                var ws = new WebSocket("ws://localhost:8888/?id=1");
-                ws.onopen = function() {
-                    ws.send("start");
-                };
-                ws.onmessage = function (evt) { 
-                    var received_msg = evt.data;
-                    messageContainer.innerHTML += received_msg;
-                    messageContainer.innerHTML += '<br />';
-                };
-                ws.onclose = function() { 
-                    messageContainer.innerHTML = "Connection is closed...";
-                };
-            } else {
-                messageContainer.innerHTML = "WebSocket NOT supported by your Browser!";
-            }
-        }
-        function reload_files(){
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET','http://localhost:8888/filename', true);
-            
-            xhr.onreadystatechange = function(){
-                if (xhr.readyState === 4 && xhr.status === 0){
-                }
-            };
-            xhr.send(null);
-            console.log(xhr.responseText);
-        }
-        </script>
-    </head>
-    <body>
-        <a href="javascript:start()">start</a>
-        <a href="javascript:reload_files()">reload files</a>
-        <select id="filename">
-        </select>
-        <div id="messages" style="height:auto;background:black;color:white;"></div>
-    </body>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="static/index.css" type="text/css"/>
+    <script src='static/init.js'></script>
+</head>
+<body>
+<div id="header">
+    <input type="button" id="connect" value="connect" />
+    <input type="button" id="start" value="start" />
+    <input type="button" id="close" value="close" />
+    <input type="button" id="clear" value="clear" />
+    <select id="filename">{{ options }}</select>
+    <p id="status">not connected</p>
+</div>
+<div id="message"></div>
+<div id="wrap_implication"><canvas id="implication"></canvas></div>
+<div id="wrap_literal"><div id="literal"></div></div>
+<div id="wrap_clause"><div id="clause"></div></div>
+</body>
 </html>
