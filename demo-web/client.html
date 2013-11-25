@@ -3,30 +3,11 @@
     <head>
         <meta charset="utf-8">
 	<script type="text/javascript">
-        function WebSocketTest() {
-            var messageContainer = document.getElementById("messages");
-            if ("WebSocket" in window) {
-                messageContainer.innerHTML = "WebSocket is supported by your Browser!";
-                var ws = new WebSocket("ws://localhost:8888/?id=123456789");
-                ws.onopen = function() {
-                    ws.send("Message to send");
-                };
-                ws.onmessage = function (evt) { 
-                    var received_msg = evt.data;
-                    messageContainer.innerHTML = "Message is received...";
-                };
-                ws.onclose = function() { 
-                    messageContainer.innerHTML = "Connection is closed...";
-                };
-            } else {
-                messageContainer.innerHTML = "WebSocket NOT supported by your Browser!";
-            }
-        }
         function start(){
             var messageContainer = document.getElementById("messages");
             if ("WebSocket" in window) {
                 messageContainer.innerHTML = "WebSocket is supported by your Browser!";
-                var ws = new WebSocket("ws://localhost:8888/?id=123456789");
+                var ws = new WebSocket("ws://localhost:8888/?id=1");
                 ws.onopen = function() {
                     ws.send("start");
                 };
@@ -42,11 +23,24 @@
                 messageContainer.innerHTML = "WebSocket NOT supported by your Browser!";
             }
         }
+        function reload_files(){
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET','http://localhost:8888/filename', true);
+            
+            xhr.onreadystatechange = function(){
+                if (xhr.readyState === 4 && xhr.status === 0){
+                }
+            };
+            xhr.send(null);
+            console.log(xhr.responseText);
+        }
         </script>
     </head>
     <body>
-        <a href="javascript:WebSocketTest()">Run WebSocket</a>
         <a href="javascript:start()">start</a>
+        <a href="javascript:reload_files()">reload files</a>
+        <select id="filename">
+        </select>
         <div id="messages" style="height:auto;background:black;color:white;"></div>
     </body>
 </html>
