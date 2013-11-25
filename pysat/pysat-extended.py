@@ -73,7 +73,7 @@ class Solver(object):
 
         # sign when literal decided.
         self.ASSIGN_DEFAULT = True
-        self.pickup_type = "random"
+        self.choose_type = "random"
         
         self.output_type = 'default'
         
@@ -307,7 +307,7 @@ class Solver(object):
         """select next decide literal from unassigned literal.
         """
 
-        if self.pickup_type == 'random':
+        if self.choose_type == 'random':
             # random
             l = [x for x in self.litlist if x.is_unassigned()]
             if len(l) == 0:
@@ -380,7 +380,10 @@ class Solver(object):
                 res['lit'][lit.id] = {'sign':lit.sign, 'reason':None if lit.reason is None else lit.reason.id, 'level':lit.level}
             for c in self.clause_list:
                 data = [blitlize(x) for x in c.bindlit_list]
-                res['clause'][c.id] = {'data':data, 'wl':list(c.watching_literal) if c.watching_literal else None}
+                res['clause'][c.id] = {'data':data, 'wl':list(c.watching_literal) if c.watching_literal else None, 'is_learnt':False}
+            for c in self.learnt_list:
+                data = [blitlize(x) for x in c.bindlit_list]
+                res['clause'][c.id] = {'data':data, 'wl':list(c.watching_literal) if c.watching_literal else None, 'is_learnt':True}
             for key in sorted(self.decide_history.keys()):
                 res['history'][key] = [self.decide_history[key].id]+[blitlize(x) for x in  self.propagate_history[key]]
             return json.dumps(res)
