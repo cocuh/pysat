@@ -12,11 +12,19 @@
     <input type="button" id="close" value="close" />
     <input type="button" id="clear" value="clear" />
     <select id="filename">{{ options }}</select>
+    <select id="time">
+        <option value="100">100ms</option>
+        <option value="0">0ms</option>
+        <option value="300">300ms</option>
+        <option value="1000">1000ms</option>
+        <option value="3000">3000ms</option>
+    </select>
+    <input type="checkbox" id="is_random">random
     <p id="status">not connected</p>
 </div>
 <div id="message"></div>
 <div id="wrap_implication"><canvas id="implication"></canvas></div>
 <div id="wrap_literal"><div id="literal"></div></div>
-<div id="wrap_clause"><div id="clause"></div></div>
+<div id="wrap_clause"><div id="clause"></div><div id="learnt"></div></div>
 </body>
 </html>

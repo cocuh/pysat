@@ -94,3 +94,11 @@ body, html{
 .clause_learnt{
     background: darkgreen;
 }
+
+#implication{
+    width: 100%;
+    height: 100%;
+    font-size: 200px;
+    font-weight: bold;
+    padding-top: 30px;
+}

@@ -43,15 +43,23 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         l = message.split(' ')
         cnf_files = os.listdir(here+'/../sample_cnf')
         filename = 'input.cnf'
+        time = 100
+        is_random = False
         if len(l)>=2:
             if l[1] in cnf_files:
                 filename = l[1]
+        if len(l)>=3:
+            if l[2].isdigit():
+                time = int(l[2])
+        if len(l)>=4:
+            if l[3].isdigit():
+                is_random = int(l[2])>0
         if len(l)>0 and l[0]=='start':
             from subprocess import Popen, PIPE, STDOUT
             if self.p:
                 self.p.kill()
             self.p = Popen(['python', '-OO', '../pysat/pysat-extended.py',
-                            '--choose-type','order' ,'--sleep','100',
+                            '--choose-type','random' if is_random else'order' ,'--sleep',str(time),
                             '--output-type','json', '../sample_cnf/'+filename],
                            stdout=PIPE,stderr=STDOUT)
             for line in iter(self.p.stdout.readline, b''):

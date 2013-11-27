@@ -7,7 +7,12 @@ window.onload=function(){
             connect();
         }
         var filename = document.getElementById('filename').value;
-        ws.send("start " + filename);
+        var time = document.getElementById('time').value;
+        var is_random = 0;
+        if(document.getElementById('is_random').cheched){
+            is_random = 1;
+        }
+        ws.send("start " + filename+' '+time+' '+is_random);
     }
     function connect(){
         ws = new WebSocket("ws://0.0.0.0:8888/start");
@@ -120,6 +125,36 @@ window.onload=function(){
         elem_clause.parentNode.replaceChild(new_elem_clause,elem_clause);
     }
     function refresh_implication(data){
-
+        var history = data['history'];
+        var elem = document.getElementById('implication');
+        var wrap = document.getElementById('wrap_implication');
+        elem.width = wrap.offsetWidth;
+        elem.height = wrap.offsetHeight-30;
+        var ctx = elem.getContext('2d');
+        ctx.clearRect(0,0,elem.width,elem.height);
+        ctx.font = "20pt Ricty"
+        var def_x = 10;
+        var def_y = 30;
+        var offset_y = def_y;
+        var offset_x = def_x;
+        var dy = 40;
+        var dx = 40;
+        function point(c){
+            ctx.fillStyle = "#FFF"
+            ctx.fillText(c, offset_x+5,offset_y-5);
+            offset_x += dx;
+        }
+        function nextLevel(){
+            offset_x = def_x;
+            offset_y += dy;
+        }
+        for(var level in history){
+            var line = history[level];
+            console.log(line)
+            for(var i=0;i<line.length;i++){
+                point(line[i]);
+            }
+            nextLevel();
+        }
     }
 };
