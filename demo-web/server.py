@@ -15,9 +15,9 @@ clients = []
 
 
 
-class IndexHandler(tornado.web.RequestHandler):
+class PrototypeHandler(tornado.web.RequestHandler):
     def get(self, *args, **kwargs):
-        res = open(here+'/client.html').read()
+        res = open(here+'/prototype.html').read()
         cnf_files = os.listdir(here+'/../sample_cnf')
         options = []
         for filename in cnf_files:
@@ -27,6 +27,13 @@ class IndexHandler(tornado.web.RequestHandler):
             print(options)
             options.append('<option value="{s}">{s} {l} {c}</option>'.format(s=filename,l=num_l,c=num_c))
         res= res.replace('{{ options }}',''.join(options))
+        self.write(res)
+        self.finish()
+
+
+class EnhancedHandler(tornado.web.RequestHandler):
+    def get(self, *args, **kwargs):
+        res = open(here+'/enhanced.html').read()
         self.write(res)
         self.finish()
 
@@ -81,7 +88,8 @@ class StaticFileHandler(tornado.web.StaticFileHandler):
 
 
 app = tornado.web.Application([
-    (r'/', IndexHandler),
+    (r'/', PrototypeHandler),
+    (r'/enhanced', EnhancedHandler),
     (r'/start', WebSocketHandler),
     (r'/static/(.*)',StaticFileHandler, {"path":here+'/static/'})
 ],)
