@@ -1,10 +1,93 @@
 html,body{
     padding: 0;
     margin: 0;
+    background: #111;
+    color: white;
+}
+
+#menu{
+    position: absolute;
+    top: 0;
+    z-index: 1000;
+}
+#menu *{
+    margin: 0;
+}
+#menu a{
+    color: white;
 }
 
 svg{
     height: 100%;
     width: 100%;
     position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 10;
+    background: transparent;
+}
+
+#message{
+    z-index: 0;
+    color: rgba(255,255,255,0.25);
+    font-size:small;
+}
+
+#status{
+    position: absolute;
+    top: 0;
+    left: 380px;
+    font-size: larger;
+}
+
+svg #literals .lit_decide{
+    font-weight: bolder;
+}
+svg #clauses .clause_or{
+    font-size: 50%;
+    font-weight: bolder;
+    color: white;
+}
+svg #clauses .learnt text{
+    fill: aqua;
+}
+
+svg #clauses .lit_true{
+    font-weight: bolder;
+    font-style: italic;
+}
+svg #clauses .lit_false{
+    text-decoration: line-through;
+    fill-opacity: 0.7;
+}
+svg #implication text{
+    font-size: 90%;
+    font-weight:bolder;
+}
+svg #implication .decided text{
+    fill: white;
+}
+svg #implication .decided circle{
+    fill: rgb(50, 90, 180);
+}
+svg #implication .propagated text{
+    fill: black;
+}
+svg #implication .propagated circle{
+    fill: white;
+}
+svg #implication .imp_rule{
+    stroke:darkgray;
+}
+svg #implication .imp_path{
+    stroke:lightgray;
+}
+svg .zeros circle{
+    fill:purple;
+}
+svg .zeros text{
+    fill:white;
+}
+svg .analyzing{
+    fill: lightcoral !important;
 }

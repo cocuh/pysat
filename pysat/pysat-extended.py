@@ -377,7 +377,7 @@ class Solver(object):
             res['history'] = OrderedDict()
             res['analyze'] = [lit.id for lit in self._done_lit]
             for lit in self.litlist:
-                res['lit'][lit.id] = {'sign':lit.sign, 'reason':None if lit.reason is None else lit.reason.id, 'level':lit.level}
+                res['lit'][lit.id] = {'id':lit.id, 'sign':lit.sign, 'reason':None if lit.reason is None else lit.reason.id, 'level':lit.level}
             for c in self.clause_list:
                 data = [blitlize(x) for x in c.bindlit_list]
                 res['clause'][c.id] = {'data':data, 'wl':list(c.watching_literal) if c.watching_literal else None, 'is_learnt':False}

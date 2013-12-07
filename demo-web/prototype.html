@@ -11,7 +11,12 @@
     <input type="button" id="start" value="start" />
     <input type="button" id="close" value="close" />
     <input type="button" id="clear" value="clear" />
-    <select id="filename">{{ options }}</select>
+    
+    <select id="filename">
+        {% for opt in options %}
+            <option value="{{opt[0]}}">{{opt[0]}} {{opt[1]}} {{opt[2]}}</option>
+        {% end %}
+    </select>
     <select id="time">
         <option value="100">100ms</option>
         <option value="0">0ms</option>
@@ -21,6 +26,7 @@
     </select>
     <input type="checkbox" id="is_random">random
     <p id="status">not connected</p>
+    <a href="/enhanced">enhanced</a>
 </div>
 <div id="message"></div>
 <div id="wrap_implication"><canvas id="implication"></canvas></div>

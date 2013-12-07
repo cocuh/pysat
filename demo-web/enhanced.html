@@ -1,15 +1,47 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>sudoku</title>
+    <title>sathogehoge</title>
     <link rel="stylesheet" href="static/enhanced.css" type="text/css"/>
-    <script src="static/snap.svg.js" charset="utf-8"></script>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <!--
+    <script src="static/d3.v3.min.js" charset="utf-8"></script>
+    -->
     <script src="static/enhanced.js"></script>
+    <!--
+    <script src="static/snap.svg.js" charset="utf-8"></script>
+    <script type="application/dart" src="static/enhanced.dart"></script>
+    <script src="static/dart.js"></script>
+    -->
 </head>
 <body>
-<div id="header">
-    <button id="start">start</button>
+<div id="menu">
+    <p>
+        <input type="button" id="connect" value="connect" />
+        <input type="button" id="start" value="start" />
+        <input type="button" id="close" value="close" />
+        <input type="button" id="clear" value="clear" />
+        <a href="/prototype">proto</a>
+        <a href="/slide#11_0">slide</a>
+    </p>
+    <p>
+        <select id="filename">
+            {% for opt in options %}
+                <option value="{{opt[0]}}">{{opt[0]}} {{opt[1]}} {{opt[2]}}</option>
+            {% end %}
+        </select>
+        <select id="time">
+            <option value="100">100ms</option>
+            <option value="0">0ms</option>
+            <option value="300">300ms</option>
+            <option value="1000">1000ms</option>
+            <option value="3000">3000ms</option>
+        </select>
+        <input type="checkbox" id="is_random">random
+    </p>
 </div>
+    <p id="status">-----</p>
 <svg id="svg"></svg>
+<div id="message"></div>
 </body>
 </html>
