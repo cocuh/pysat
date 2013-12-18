@@ -24,13 +24,13 @@
      borderopacity="1.0"
      inkscape:pageopacity="1"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.0000001"
-     inkscape:cx="385.49956"
-     inkscape:cy="172.60338"
+     inkscape:zoom="1"
+     inkscape:cx="624.55482"
+     inkscape:cy="373.39915"
      inkscape:document-units="px"
-     inkscape:current-layer="layer8"
-     showgrid="true"
-     inkscape:window-width="1438"
+     inkscape:current-layer="layer3"
+     showgrid="false"
+     inkscape:window-width="862"
      inkscape:window-height="884"
      inkscape:window-x="0"
      inkscape:window-y="14"
@@ -784,7 +784,7 @@
      inkscape:groupmode="layer"
      id="layer3"
      inkscape:label="title"
-     style="display:none">
+     style="display:inline">
     <text
        id="text3816-7"
        y="180"
@@ -896,7 +896,7 @@
          id="tspan4898"
          x="145"
          y="250"
-         style="font-size:18px">DPLL+節学習</tspan></text>
+         style="font-size:22px">DPLL+節学習</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#fffb99;fill-opacity:1;stroke:none;display:inline;font-family:Hiragino Kaku Gothic ProN;-inkscape-font-specification:Hiragino Kaku Gothic ProN Light"
@@ -918,18 +918,14 @@
     <text
        xml:space="preserve"
        style="font-size:24px;font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;display:inline;font-family:Hiragino Kaku Gothic ProN;-inkscape-font-specification:Hiragino Kaku Gothic ProN Light"
-       x="170"
+       x="133.25989"
        y="370"
        id="text4896-4"><tspan
          sodipodi:role="line"
          id="tspan4898-1"
-         x="170"
+         x="133.25989"
          y="370"
-         style="font-size:18px">節が<tspan
-   id="tspan30543"
-   style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-family:Kinnari;-inkscape-font-specification:Kinnari Medium">True</tspan>か<tspan
-   id="tspan30541"
-   style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-family:Kinnari;-inkscape-font-specification:Kinnari Medium">False</tspan>であるかを判定するループをなくす</tspan></text>
+         style="font-size:22px">節が充足可能か否かの探索のコストを減らす</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:24px;font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;display:inline;font-family:Hiragino Kaku Gothic ProN;-inkscape-font-specification:Hiragino Kaku Gothic ProN Light"
@@ -939,7 +935,7 @@
          sodipodi:role="line"
          x="145"
          y="280"
-         style="font-size:18px"
+         style="font-size:22px"
          id="tspan14260">バックジャンプ</tspan></text>
     <path
        sodipodi:type="arc"
@@ -1022,11 +1018,11 @@
          y="300">＿人 人＿</tspan><tspan
          sodipodi:role="line"
          x="110"
-         y="335"
+         y="335.07565"
          id="tspan20874">＞ 矛盾 ＜</tspan><tspan
          sodipodi:role="line"
          x="110"
-         y="370"
+         y="370.15128"
          id="tspan20876">￣Y^Y￣</tspan></text>
     <text
        xml:space="preserve"
@@ -1041,7 +1037,7 @@
          id="tspan20886" /><tspan
          sodipodi:role="line"
          x="340"
-         y="335"
+         y="334.92435"
          id="tspan20890">解析</tspan></text>
     <text
        ns0:effectIn="name:appear;order:2;length:800"
@@ -1056,7 +1052,7 @@
          y="300" /><tspan
          sodipodi:role="line"
          x="550"
-         y="335"
+         y="334.92435"
          id="tspan20892">学習</tspan></text>
     <path
        sodipodi:nodetypes="cc"
@@ -1609,7 +1605,9 @@
            y="307.62485"
            x="481.41635"
            id="tspan16965"
-           sodipodi:role="line">-g</tspan></text>
+           sodipodi:role="line"><tspan
+   style="font-size:20px"
+   id="tspan3850">¬</tspan>g</tspan></text>
     </g>
     <g
        id="g17148"
@@ -1633,7 +1631,9 @@
            y="227.64001"
            x="309.82938"
            id="tspan16973"
-           sodipodi:role="line">-f</tspan></text>
+           sodipodi:role="line"><tspan
+   style="font-size:20px"
+   id="tspan3852">¬</tspan>f</tspan></text>
     </g>
     <g
        id="g17174"
@@ -1657,7 +1657,9 @@
            y="374.86801"
            x="380"
            id="tspan16981"
-           sodipodi:role="line">-e</tspan></text>
+           sodipodi:role="line"><tspan
+   style="font-size:20px"
+   id="tspan3848">¬</tspan>e</tspan></text>
     </g>
     <g
        id="g17200"
@@ -1681,7 +1683,9 @@
            y="310"
            x="220.21527"
            id="tspan16989"
-           sodipodi:role="line">-c</tspan></text>
+           sodipodi:role="line"><tspan
+   style="font-size:20px"
+   id="tspan3846">¬</tspan>c</tspan></text>
     </g>
     <g
        ns0:effectIn="name:appear;order:5;length:800"
@@ -1781,12 +1785,13 @@
          style="font-size:24px;font-weight:300;-inkscape-font-specification:Hiragino Kaku Gothic ProN Light">decide</tspan></text>
     <text
        id="text17137"
-       y="140"
-       x="300"
-       style="font-size:18px;font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Hiragino Kaku Gothic ProN;-inkscape-font-specification:Hiragino Kaku Gothic ProN Light"
-       xml:space="preserve"><tspan
-         y="140"
-         x="300"
+       y="132.85739"
+       x="316.02255"
+       style="font-size:17.08166313px;font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Hiragino Kaku Gothic ProN;-inkscape-font-specification:Hiragino Kaku Gothic ProN Light"
+       xml:space="preserve"
+       transform="scale(0.94898126,1.0537616)"><tspan
+         y="132.85739"
+         x="316.02255"
          id="tspan17139"
          sodipodi:role="line">(¬a∨b) ∧ (¬b∨¬f) ∧ (f∨g) ∧ (¬b∨¬c) ∧ (c∨d) ∧ (c∧¬d∧¬e) ∧ (e∧-g)</tspan></text>
     <text
@@ -2659,7 +2664,7 @@
      inkscape:groupmode="layer"
      id="layer8"
      inkscape:label="implication graph"
-     style="display:inline">
+     style="display:none">
     <text
        id="text20831"
        y="80"
@@ -3252,7 +3257,7 @@
        transform="translate(319.49999,96.999997)"
        id="g7943">
       <g
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:#ffaaaa;stroke:#000000;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10.43299960999999954;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:#ffaaaa;stroke:#000000;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10.43299961;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
          id="content"
          transform="matrix(0.68571429,0,0,-0.68571429,-120,480)"
          xml:space="preserve"
@@ -7225,6 +7230,100 @@ String.prototype.trim = function()
          sodipodi:role="line">10回測定の平均</tspan></text>
   </g>
   <g
+     style="display:none"
+     inkscape:label="source copy copy"
+     id="g3855"
+     inkscape:groupmode="layer">
+    <text
+       id="text3857"
+       y="558.79187"
+       x="738.42151"
+       style="font-size:24px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Hiragino Kaku Gothic ProN;-inkscape-font-specification:Hiragino Kaku Gothic ProN Semi-Bold"
+       xml:space="preserve"><tspan
+         y="558.79187"
+         x="738.42151"
+         id="tspan3859"
+         sodipodi:role="line" /></text>
+    <text
+       xml:space="preserve"
+       style="font-size:72px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#fff2be;fill-opacity:1;stroke:none;display:inline;font-family:URW Gothic L;-inkscape-font-specification:URW Gothic L Semi-Bold"
+       x="40"
+       y="80"
+       id="text3861"><tspan
+         sodipodi:role="line"
+         id="tspan3863"
+         x="40"
+         y="80"
+         style="font-size:40px;font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;letter-spacing:-2px;fill:#ffffff;fill-opacity:1;font-family:Hiragino Kaku Gothic ProN;-inkscape-font-specification:Hiragino Kaku Gothic ProN Light">PySatの性能</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.001;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Hiragino Kaku Gothic ProN;-inkscape-font-specification:Hiragino Kaku Gothic ProN Light"
+       x="100"
+       y="150"
+       id="text3865"><tspan
+         sodipodi:role="line"
+         id="tspan3867"
+         x="100"
+         y="150">行数</tspan></text>
+    <path
+       sodipodi:type="arc"
+       style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.001;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="path3869"
+       sodipodi:cx="85"
+       sodipodi:cy="125"
+       sodipodi:rx="5"
+       sodipodi:ry="5"
+       d="m 90,125 a 5,5 0 1 1 -10,0 5,5 0 1 1 10,0 z"
+       transform="translate(0,10)" />
+    <g
+       style="display:inline"
+       id="g3901"
+       transform="translate(-223.43655,-60)">
+      <text
+         id="text3903"
+         y="270"
+         x="491.97562"
+         style="font-size:32px;font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;text-align:end;writing-mode:lr-tb;text-anchor:end;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.001;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline;font-family:Hiragino Kaku Gothic ProN;-inkscape-font-specification:Hiragino Kaku Gothic ProN Light"
+         xml:space="preserve"><tspan
+           y="270"
+           x="502.16312"
+           id="tspan3905"
+           sodipodi:role="line"
+           style="font-size:32px">PySat </tspan><tspan
+           y="310"
+           x="491.97562"
+           sodipodi:role="line"
+           id="tspan3907"
+           style="font-size:32px" /><tspan
+           id="tspan3909"
+           y="350"
+           x="502.16312"
+           sodipodi:role="line"
+           style="font-size:32px">MiniSat </tspan></text>
+      <text
+         id="text3911"
+         y="270"
+         x="500"
+         style="font-size:32px;font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.001;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:Hiragino Kaku Gothic ProN;-inkscape-font-specification:Hiragino Kaku Gothic ProN Light"
+         xml:space="preserve"><tspan
+           id="tspan3917"
+           y="270"
+           x="500"
+           sodipodi:role="line"
+           style="font-size:32px">-&gt; 620行</tspan><tspan
+           y="310.08646"
+           x="500"
+           sodipodi:role="line"
+           style="font-size:32px"
+           id="tspan3930" /><tspan
+           y="350.17291"
+           x="500"
+           sodipodi:role="line"
+           id="tspan3921"
+           style="font-size:32px">-&gt; 1962行</tspan></text>
+    </g>
+  </g>
+  <g
      inkscape:groupmode="layer"
      id="layer12"
      inkscape:label="天望"
@@ -7368,7 +7467,7 @@ String.prototype.trim = function()
          sodipodi:role="line">firefoxのバージョンごとの</tspan><tspan
          id="tspan3966"
          style="font-size:20px"
-         y="385"
+         y="385.05402"
          x="205"
          sodipodi:role="line">svgレンダラの挙動の違い</tspan></text>
     <text

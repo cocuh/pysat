@@ -51,8 +51,10 @@ class SlideHandler(tornado.web.RequestHandler):
     def get(self, *args, **kwargs):
     #    self.render('slide.html')
         self.set_header('Content-Type','image/svg+xml')
-        fp = open(here+'/slide.svg')
-        self.finish(fp.read())
+        data = open(here+'/slide.svg').read()
+        if os.path.exists(here+'/name'):
+            data = data.replace("foobar", open(here+'/name').read())
+        self.finish(data)
 
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
     def open(self):
