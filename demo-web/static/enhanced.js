@@ -61,11 +61,13 @@ window.onload = function () {
         if (document.getElementById('is_random').cheched) {
             is_random = 1;
         }
-        ws.send("start " + filename + ' ' + time + ' ' + is_random);
+        if(ws.readyState == 1){
+            ws.send("start " + filename + ' ' + time + ' ' + is_random);
+        }
     }
 
     function connect() {
-        ws = new WebSocket("ws://0.0.0.0:8888/start");
+        ws = new WebSocket("ws://127.0.0.1:8888/start");
         ws.onopen = function () {
             ws.send("");
             console.log("connected.");
