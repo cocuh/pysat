@@ -24,16 +24,16 @@
      borderopacity="1.0"
      inkscape:pageopacity="1"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.70710678"
-     inkscape:cx="303.54815"
-     inkscape:cy="351.6593"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="358.92988"
+     inkscape:cy="297.58701"
      inkscape:document-units="px"
-     inkscape:current-layer="g117340"
+     inkscape:current-layer="layer12"
      showgrid="true"
-     inkscape:window-width="1918"
-     inkscape:window-height="1078"
+     inkscape:window-width="1438"
+     inkscape:window-height="884"
      inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-y="14"
      inkscape:window-maximized="0"
      showguides="true"
      inkscape:guide-bbox="true"
@@ -10358,7 +10358,7 @@ String.prototype.trim = function()
          y="150">10回測定の平均</tspan></text>
   </g>
   <g
-     style="display:none"
+     style="display:inline"
      inkscape:label="天望"
      id="layer12"
      inkscape:groupmode="layer">
@@ -10372,7 +10372,7 @@ String.prototype.trim = function()
          id="tspan38284"
          x="40"
          y="80"
-         style="font-size:40px;font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;letter-spacing:-2px;fill:#ffffff;fill-opacity:1;font-family:Hiragino Kaku Gothic ProN;-inkscape-font-specification:Hiragino Kaku Gothic ProN Light">今後の天望</tspan></text>
+         style="font-size:40px;font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;letter-spacing:-2px;fill:#ffffff;fill-opacity:1;font-family:Hiragino Kaku Gothic ProN;-inkscape-font-specification:Hiragino Kaku Gothic ProN Light">今後の展望</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:32px;font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.001;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline;font-family:Hiragino Kaku Gothic ProN;-inkscape-font-specification:Hiragino Kaku Gothic ProN Light"
