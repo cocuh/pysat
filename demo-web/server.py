@@ -57,6 +57,9 @@ class SlideHandler(tornado.web.RequestHandler):
         self.finish(data)
 
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
+    def check_origin(self, origin):
+        return True
+
     def open(self):
         self.stream.set_nodelay(True)
         clients.append(self)
